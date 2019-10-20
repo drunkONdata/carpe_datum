@@ -1,17 +1,25 @@
+import tempfile
 import numpy as np
 import pandas as pd
 import impyute
+from google.cloud import storage
 from sys import argv
 
-def main(file_name):
+
+def main(bucket_name, file_name):
     '''
     Creates data with nulls based off the input file_name. Generates csv's
     of nulled data with various imputations and a csv of rmse for each method
 
     Input:
+        bucket_name: (str) The name of the GCS bucket in which the file is stored
         file_name: (str) A directory path to the data file to be used
     '''
-    df = pd.read_csv(file_name)
+    gcs_url = "gs://{bucket_name}/{file_name}".format(
+        bucket_name=bucket_name, 
+        file_name=file_name
+        )
+    df = pd.read_csv(gcs_url)
     null_df = mute_dataTOP50(df)
     outfilenames = impute_metrics(df, null_df, file_name[:-4])
 
@@ -31,12 +39,23 @@ def impute_metrics(df, null_df, file_name):
     imputes = [impyute.imputation.cs.mice, impyute.imputation.cs.mean,
                impyute.imputation.cs.fast_knn, impyute.imputation.ts.moving_window]
     outfilenames = []
+
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket("spaceapps-2019-results-public")
     for impute in imputes:
         df_imputed = impute(null_df)
-        df.to_csv(file_name + '_' + impute.__name__ + '.csv')
+        with tempfile.NamedTemporaryFile() as temp:
+            blobname = file_name + '_' + impute.__name__ + '.csv'
+            blob = bucket.blob(blobname)
+            df.to_csv(temp.name)
+            blob.upload_from_file(temp)       
         outfilenames.append(file_name + '_' + impute.__name__ + '.csv')
         metrics[impute.__name__] = [total_rmse(df, df_imputed)]
-    pd.DataFrame.from_dict(metrics).to_csv(file_name + '_results' + '.csv')
+    with tempfile.NamedTemporaryFile() as temp:
+        blobname = file_name + '_results' + '.csv'
+        pd.DataFrame.from_dict(metrics).to_csv(temp.name)
+        blob = bucket.blob(blobname)
+        blob.upload_from_file(temp)  
     outfilenames.append(file_name + '_results' + '.csv')
 
     return outfilenames
