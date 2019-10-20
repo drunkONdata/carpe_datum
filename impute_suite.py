@@ -18,6 +18,14 @@ def main(file_name):
 
 
 def impute_metrics(df, null_df, file_name):
+    '''
+    Generates csv's with imputed data and a csv with rmse for each method
+
+    Input:
+        df: (DataFrame) Pandas DataFrame with no nulls
+        null_df: (DataFrame) Same as df except with nulls
+        file_name: (str) Base name of the files to be generated
+    '''
     metrics = {}
     imputes = [impyute.imputation.cs.mice, impyute.imputation.cs.mean,
                impyute.imputation.cs.fast_knn, impyute.imputation.ts.moving_window]
