@@ -43,10 +43,7 @@ Our solution is:
 - SpaceApps Project Page: https://bit.ly/2VW9HC6
 
 ### Future Work
-* Expand model offerings with additional models like:
-      * Bayesian No-U-Turn
-      * Spline & Polynomial interpolation
-      * GANs etc.
+* Expand model offerings with additional models like: Bayesian No-U-Turn, Spline & Polynomial interpolation, GANs etc.
 * Validate work & data pipeline with different types of data
 * Expand error handling mechanisms
 * Create dashboard that automatically updates population forecasts with updated satellite imagery data
