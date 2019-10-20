@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import pandas as pd
 import impyute
@@ -32,10 +33,13 @@ def impute_metrics(df, null_df, file_name):
                impyute.imputation.cs.fast_knn, impyute.imputation.ts.moving_window]
     outfilenames = []
     for impute in imputes:
+        start = time.time()
         df_imputed = impute(null_df)
+        stop = time.time()
         df.to_csv(file_name + '_' + impute.__name__ + '.csv')
         outfilenames.append(file_name + '_' + impute.__name__ + '.csv')
         metrics[impute.__name__] = [total_rmse(df, df_imputed)]
+        metrics[impute.__name__].append(stop - start)
     pd.DataFrame.from_dict(metrics).to_csv(file_name + '_results' + '.csv')
     outfilenames.append(file_name + '_results' + '.csv')
 
