@@ -17,7 +17,7 @@ def main(bucket_name, file_name):
         file_name: (str) A directory path to the data file to be used
     '''
     gcs_url = "gs://{bucket_name}/{file_name}".format(
-        bucket_name=bucket_name, 
+        bucket_name=bucket_name,
         file_name=file_name
         )
     df = pd.read_csv(gcs_url)
@@ -46,19 +46,19 @@ def impute_metrics(df, null_df, file_name):
     for impute in imputes:
         start = time.time()
         df_imputed = impute(null_df)
+        stop = time.time()
         with tempfile.NamedTemporaryFile() as temp:
             blobname = file_name + '_' + impute.__name__ + '.csv'
             blob = bucket.blob(blobname)
             df.to_csv(temp.name)
-            blob.upload_from_file(temp)       
+            blob.upload_from_file(temp)
         outfilenames.append(file_name + '_' + impute.__name__ + '.csv')
         metrics[impute.__name__] = [total_rmse(df, df_imputed)]
     with tempfile.NamedTemporaryFile() as temp:
         blobname = file_name + '_results' + '.csv'
         pd.DataFrame.from_dict(metrics).to_csv(temp.name)
         blob = bucket.blob(blobname)
-        blob.upload_from_file(temp)  
-        stop = time.time()
+        blob.upload_from_file(temp)
         df.to_csv(file_name + '_' + impute.__name__ + '.csv')
         outfilenames.append(file_name + '_' + impute.__name__ + '.csv')
         metrics[impute.__name__] = [total_rmse(df, df_imputed)]
