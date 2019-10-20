@@ -1,18 +1,38 @@
-FROM python:3.8-buster
+#FROM python:3.8-buster
+FROM google/cloud-sdk
 
 ADD . /opt/carpe-datum
 
+ENV PACKAGES="\
+        apt-utils \
+        apt-transport-https \
+        dumb-init \
+        wget \
+        curl \
+        openssh-client \
+        python-openssl \
+        git \
+        ca-certificates \
+        tzdata \
+        python3 \
+        python3-pip \
+    " 
+
 RUN apt-get update && \
-    apt-get install -y apt-utils apt-transport-https ca-certificates curl && \
-    curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz && \
-    mkdir -p /usr/local/gcloud && \
-    tar -C /usr/local/gcloud -xvf /tmp/google-cloud-sdk.tar.gz && \
-    /usr/local/gcloud/google-cloud-sdk/install.sh
+    DEBIAN_FRONTEND=noninteractive apt-get install -y $PACKAGES && \
+    ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime && \
+    pip3 install pandas \
+                 impyute \
+                 google-cloud-storage
+    #curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz && \
+    #mkdir -p /usr/local/gcloud && \
+    #tar -C /usr/local/gcloud -xvf /tmp/google-cloud-sdk.tar.gz && \
+    #/usr/local/gcloud/google-cloud-sdk/install.sh && \
+    #pip install impyute \
+    #            google-cloud-storage
 
 ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
 WORKDIR /opt/carpe-datum
-
-RUN gsutil cp gs://gcp-public-data-landsat/LC08/01/044/034/LC08_L1GT_044034_20130330_20170310_01_T2/LC08_L1GT_044034_20130330_20170310_01_T2_ANG.txt .
 
 ENTRYPOINT ["bash", "run.sh"]

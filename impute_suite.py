@@ -11,10 +11,12 @@ def main(file_name):
     Input:
         file_name: (str) A directory path to the data file to be used
     '''
-    df = pd.read_csv('train_data.csv')
+    df = pd.read_csv(file_name)
     df = df[df['Unit Number'] == 2]
     null_df = mute_data(df)
-    impute_metrics(df, null_df, file_name[:-4])
+    outfilenames = impute_metrics(df, null_df, file_name[:-4])
+
+    return outfilenames
 
 
 def impute_metrics(df, null_df, file_name):
@@ -29,12 +31,16 @@ def impute_metrics(df, null_df, file_name):
     metrics = {}
     imputes = [impyute.imputation.cs.mice, impyute.imputation.cs.mean,
                impyute.imputation.cs.fast_knn, impyute.imputation.ts.moving_window]
+    outfilenames = []
     for impute in imputes:
         df_imputed = impute(null_df)
         df.to_csv(file_name + '_' + impute.__name__ + '.csv')
+        outfilenames.append(file_name + '_' + impute.__name__ + '.csv')
         #import pdb; pdb.set_trace()
         metrics[impute.__name__] = [total_rmse(df, df_imputed)]
     pd.DataFrame.from_dict(metrics).to_csv(file_name + '_results' + '.csv')
+
+    return outfilenames
 
 
 def total_rmse(df, df_imputed):

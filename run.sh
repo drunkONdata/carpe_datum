@@ -1,2 +1,8 @@
 #!/bin/bash
-echo Your container args are: "$@"
+echo args: "$@"
+
+gsutil -q cp $1 input.csv
+
+python3 run.py input.csv
+
+cat results
