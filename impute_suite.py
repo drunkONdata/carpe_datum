@@ -32,7 +32,6 @@ def impute_metrics(df, null_df, file_name):
     for impute in imputes:
         df_imputed = impute(null_df)
         df.to_csv(file_name + '_' + impute.__name__ + '.csv')
-        #import pdb; pdb.set_trace()
         metrics[impute.__name__] = [total_rmse(df, df_imputed)]
     pd.DataFrame.from_dict(metrics).to_csv(file_name + '_results' + '.csv')
 
