@@ -35,7 +35,11 @@ Our solution is:
 ### Scope
 
 ### Modeling
-
+Imputation Methods using impyute library
+* Mean - A benchmark to use a sensor's mean to fill in missing data
+* MICE - Multiple Imputation by Chained Equations
+* Fast KNN - Does an initial mean imputation to get a working array, then fill in nulls with weighted average of the K-nearest neighbors from the working array
+* Moving Window - 
 
 ### Links
 - Presentation Slides: http://bit.ly/32siTkd
