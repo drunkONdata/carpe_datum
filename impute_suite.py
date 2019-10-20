@@ -2,6 +2,11 @@ import numpy as np
 import pandas as pd
 import impyute
 
+def main(file_name):
+    df = pd.read_csv('train_data.csv')
+    null_df = mute_data(df)
+    impute_metrics(df, null_df, file_name)
+
 def impute_metrics(df, null_df, file_name):
     metrics = {}
     imputes = [impyute.imputation.cs.mice, impyute.imputation.cs.mean,
