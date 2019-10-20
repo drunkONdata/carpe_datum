@@ -43,6 +43,9 @@ def impute_metrics(df, null_df, file_name):
 
 
 def total_rmse(df, df_imputed):
+    '''
+    Returns the rmse between imputed values and true values
+    '''
     return (sum(sum((np.array(df_imputed) - np.array(df))**2))/len(df))**0.5
 
 def get_data(filename, filter=True):
