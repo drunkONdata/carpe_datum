@@ -1,4 +1,6 @@
 import tempfile
+import zipfile
+import os
 import numpy as np
 import pandas as pd
 import impyute
@@ -42,21 +44,30 @@ def impute_metrics(df, null_df, file_name):
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket("spaceapps-2019-results-public")
-    for impute in imputes:
-        df_imputed = impute(null_df)
-        with tempfile.NamedTemporaryFile() as temp:
-            blobname = file_name + '_' + impute.__name__ + '.csv'
-            blob = bucket.blob(blobname)
-            df.to_csv(temp.name)
-            blob.upload_from_file(temp)       
-        outfilenames.append(file_name + '_' + impute.__name__ + '.csv')
-        metrics[impute.__name__] = [total_rmse(df, df_imputed)]
-    with tempfile.NamedTemporaryFile() as temp:
-        blobname = file_name + '_results' + '.csv'
-        pd.DataFrame.from_dict(metrics).to_csv(temp.name)
+
+    # make a temporary directory to write the csv files to
+    with tempfile.mkdtemp() as tmpdir:
+        for impute in imputes:
+            df_imputed = impute(null_df)
+            filename = file_name + '_' + impute.__name__ + '.csv'
+            df.to_csv("{tmpdir}/{filename}".format(tmpdir=tmpdir, filename=filename))     
+            outfilenames.append(file_name + '_' + impute.__name__ + '.csv')
+            metrics[impute.__name__] = [total_rmse(df, df_imputed)]
+        
+        filename = file_name + '_results' + '.csv'
+        pd.DataFrame.from_dict(metrics).to_csv("{tmpdir}/{filename}")
+        outfilenames.append(file_name + '_results' + '.csv')
+
+        # combine the files into a zip
+        blobname = file_name + '_results' + '.zip'
+        zf = zipfile.ZipFile(blobname, mode='w')
+        for file in outfilenames:
+            zf.write("{tmpdir}/{file}".format(tmpdir=tmpdir, file=file))
+
+        # upload the zip to cloud storage
         blob = bucket.blob(blobname)
-        blob.upload_from_file(temp)  
-    outfilenames.append(file_name + '_results' + '.csv')
+        blob.upload_from_file(zf)  
+
 
     return outfilenames
 
