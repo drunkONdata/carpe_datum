@@ -12,6 +12,7 @@ from flask import Flask, request, jsonify
 
 
 app = Flask(__name__)
+app.secret_key = "secret key"
 
 @app.route('/', methods=['POST'])
 def index():
@@ -48,6 +49,9 @@ def download_blob(bucket_name, source_blob_name, destination_file_name):
     blob.download_to_filename(destination_file_name)
 
 if __name__ == "__main__":
+    app.run(port=9090, debug=True)
+
+    """
     parser = argparse.ArgumentParser(description='Impute missing values from .csv')
     parser.add_argument('infile', type=Path, help='.csv file from which to impute missing values')
 
@@ -58,3 +62,4 @@ if __name__ == "__main__":
     with open("results", "w") as results:
         for outfilename in outfilenames:
             results.write(outfilename + "\n")
+    """
