@@ -11,7 +11,7 @@ def main(file_name):
     Input:
         file_name: (str) A directory path to the data file to be used
     '''
-    df = pd.read_csv('train_data.csv')
+    df = pd.read_csv(file_name)
     df = df[df['Unit Number'] == 2]
     null_df = mute_data(df)
     impute_metrics(df, null_df, file_name[:-4])
