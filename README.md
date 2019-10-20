@@ -36,15 +36,18 @@ Our solution is:
 ### Data
 We used turbo fan sensor data from NASA. Consists of 21 censor readings over time.
 
-### Censoring (Creating Nulls)
-In order to train our model we needed a complete data set to determine how well we filled in nulls. There were no nulls in this dataset. We mimicked sensor failures by having sensors intermittently go out for durations of time. We felt this was more realistic than a sensor flickering one random unit of time to the next.
+### Muting Data (Creating Nulls)
+In order to train our model we needed a complete data set to determine how well we filled in nulls. There were no nulls in this dataset. We mimicked sensor failures by simulating sensors intermittently malfunctioning for durations of time. We felt this was more realistic than a sensor flickering one random unit of time to the next.
 
 ### Modeling
-Imputation Methods using impyute library
+We used Imputation Methods from the impyute library 
 * Mean - A benchmark to use a sensor's mean to fill in missing data
 * MICE - Multiple Imputation by Chained Equations
 * Fast KNN - Does an initial mean imputation to get a working array, then fill in nulls with weighted average of the K-nearest neighbors from the working array
 * Moving Window - 
+
+### Cross Validation
+We compared model performance using Root Mean Square Error and compared our imputed results to the original data set. Our benchmark metric was based on the Mean Imputation.
 
 ### Links
 - Presentation Slides: http://bit.ly/32siTkd
