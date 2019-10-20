@@ -23,6 +23,7 @@ RUN apt-get update && \
     ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime && \
     pip3 install pandas \
                  impyute \
+                 flask\
                  google-cloud-storage
     #curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz && \
     #mkdir -p /usr/local/gcloud && \
@@ -35,4 +36,4 @@ ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
 WORKDIR /opt/carpe-datum
 
-ENTRYPOINT ["bash", "run.sh"]
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 main:app
