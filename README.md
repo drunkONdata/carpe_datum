@@ -33,6 +33,11 @@ Our solution is:
 * Easily interpret model performance via custom scoring metrics
 
 ### Scope
+### Data
+We used turbo fan sensor data from NASA. Consists of 21 censor readings over time.
+
+### Censoring (Creating Nulls)
+In order to train our model we needed a complete data set to determine how well we filled in nulls. There were no nulls in this dataset. We mimicked sensor failures by having sensors intermittently go out for durations of time. We felt this was more realistic than a sensor flickering one random unit of time to the next.
 
 ### Modeling
 Imputation Methods using impyute library
