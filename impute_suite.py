@@ -1,21 +1,26 @@
 import numpy as np
 import pandas as pd
 import impyute
+from sys import argv
 
 def main(file_name):
     df = pd.read_csv('train_data.csv')
+    df = df[df['Unit Number'] == 2]
     null_df = mute_data(df)
-    impute_metrics(df, null_df, file_name)
+    impute_metrics(df, null_df, file_name[:-4])
+
 
 def impute_metrics(df, null_df, file_name):
     metrics = {}
     imputes = [impyute.imputation.cs.mice, impyute.imputation.cs.mean,
                impyute.imputation.cs.fast_knn, impyute.imputation.ts.moving_window]
     for impute in imputes:
-        df_imputed = impute(df_nulls)
-        df.to_csv(file_name + '_' + impute.__name__)
+        df_imputed = impute(null_df)
+        df.to_csv(file_name + '_' + impute.__name__ + '.csv')
+        import pdb; pdb.set_trace()
         metrics[impute.__name__] = [total_rmse(df, df_imputed)]
-    pd.DataFrame.from_dict(metrics).to_csv(file_name + '_results')
+    pd.DataFrame.from_dict(metrics).to_csv(file_name + '_results' + '.csv')
+
 
 def total_rmse(df, df_imputed):
     return sum(sum((np.array(df_imputed) - np.array(df))**2))
@@ -80,3 +85,6 @@ def time_series(muted_df):
         sm_percents_over_time[x] = null_percents
         time_df = pd.DataFrame(sm_percents_over_time)
         time_df.plot(figsize=(15,15))
+
+if __name__ == '__main__':
+    main(argv[1])
