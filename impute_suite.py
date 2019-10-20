@@ -4,6 +4,13 @@ import impyute
 from sys import argv
 
 def main(file_name):
+    '''
+    Creates data with nulls based off the input file_name. Generates csv's
+    of nulled data with various imputations and a csv of rmse for each method
+
+    Input:
+        file_name: (str) A directory path to the data file to be used
+    '''
     df = pd.read_csv('train_data.csv')
     df = df[df['Unit Number'] == 2]
     null_df = mute_data(df)
@@ -17,7 +24,7 @@ def impute_metrics(df, null_df, file_name):
     for impute in imputes:
         df_imputed = impute(null_df)
         df.to_csv(file_name + '_' + impute.__name__ + '.csv')
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         metrics[impute.__name__] = [total_rmse(df, df_imputed)]
     pd.DataFrame.from_dict(metrics).to_csv(file_name + '_results' + '.csv')
 
