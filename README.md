@@ -35,7 +35,11 @@ Our solution is:
 ### Scope
 
 ### Modeling
-
+Imputation Methods using impyute library
+* Mean - A benchmark to use a sensor's mean to fill in missing data
+* MICE - Multiple Imputation by Chained Equations
+* Fast KNN - Does an initial mean imputation to get a working array, then fill in nulls with weighted average of the K-nearest neighbors from the working array
+* Moving Window - 
 
 ### Links
 - Presentation Slides: http://bit.ly/32siTkd
@@ -43,8 +47,10 @@ Our solution is:
 - SpaceApps Project Page: https://bit.ly/2VW9HC6
 
 ### Future Work
-*
-*
+* Expand model offerings with additional models like: Bayesian No-U-Turn, Spline & Polynomial interpolation, GANs etc.
+* Validate work & data pipeline with different types of data
+* Expand error handling mechanisms
+* Create dashboard that automatically updates population forecasts with updated satellite imagery data
 
 ### MIT License
 Copyright (c) 2019 Carpe Datum
