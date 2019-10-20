@@ -1,7 +1,7 @@
 ![Carpe Datum!](images/head.png)
 
 ### Motivation
-How do we make mission critical decisions with incomplete data? Can we derive insights from the missing data? seal_team_404 is "chasing lost data" by developing an auto-ML imputation tool to mitigate data loss.
+How do we make mission critical decisions with incomplete data? Can we derive insights from the missing data? Our team is "chasing lost data" by developing an auto-ML imputation tool to mitigate data loss.
 
 
 ### The Challenge
@@ -38,7 +38,7 @@ Our solution is:
 
 
 ### Links
-- Presentation Slides: 
+- Presentation Slides: http://bit.ly/32siTkd
 - GitHub: https://github.com/drunkONdata/carpe_datum
 - SpaceApps Project Page: https://bit.ly/2VW9HC6
 
