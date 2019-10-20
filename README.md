@@ -19,7 +19,7 @@ Help find ways to improve the performance of machine learning and predictive mod
 **Space Apps Challenge Hackathon** - Seattle, WA - October 18-20, 2019
 
 <p align="center">
-  <img src="images/space_apps.png" width="350" title="NASA SpaceApps 2018 - Seattle ">
+  <img src="images/space_apps.png" width="350" title="NASA SpaceApps 2019 - Seattle ">
 </p>
 
 ### Our Project
@@ -39,15 +39,15 @@ Our solution is:
 
 ### Links
 - Presentation Slides: 
-- GitHub: https://github.com/drunkONdata/Multaja
-- SpaceApps Project Page: 
+- GitHub: https://github.com/drunkONdata/carpe_datum
+- SpaceApps Project Page: https://bit.ly/2VW9HC6
 
 ### Future Work
 *
 *
 
 ### MIT License
-Copyright (c) 2018 Multaja'
+Copyright (c) 2019 Carpe Datum
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
