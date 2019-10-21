@@ -48,7 +48,6 @@ def impute_metrics(df, null_df, file_name):
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket("spaceapps-2019-results-public")
-<<<<<<< HEAD
 
     # make a temporary directory to write the csv files to
     with tempfile.mkdtemp() as tmpdir:
@@ -73,31 +72,6 @@ def impute_metrics(df, null_df, file_name):
         blob = bucket.blob(blobname)
         blob.upload_from_file(zf)  
 
-=======
-    for impute in imputes:
-        start = time.time()
-        df_imputed = impute(null_df)
-        stop = time.time()
-        with tempfile.NamedTemporaryFile() as temp:
-            blobname = file_name + '_' + impute.__name__ + '.csv'
-            blob = bucket.blob(blobname)
-            df.to_csv(temp.name)
-            blob.upload_from_file(temp)
-        outfilenames.append(file_name + '_' + impute.__name__ + '.csv')
-        metrics[impute.__name__] = [total_rmse(df, df_imputed)]
-    with tempfile.NamedTemporaryFile() as temp:
-        blobname = file_name + '_results' + '.csv'
-        pd.DataFrame.from_dict(metrics).to_csv(temp.name)
-        blob = bucket.blob(blobname)
-        blob.upload_from_file(temp)
-        df.to_csv(file_name + '_' + impute.__name__ + '.csv')
-        outfilenames.append(file_name + '_' + impute.__name__ + '.csv')
-        metrics[impute.__name__] = [total_rmse(df, df_imputed)]
-        metrics[impute.__name__].append(stop - start)
-    pd.DataFrame.from_dict(metrics).to_csv(file_name + '_results' + '.csv')
-
-    outfilenames.append(file_name + '_results' + '.csv')
->>>>>>> e7b16bab2320a0bba646c0d8edf9d5e76a3ba81a
 
     return outfilenames
 

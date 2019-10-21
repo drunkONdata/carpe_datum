@@ -48,8 +48,6 @@ def download_blob(bucket_name, source_blob_name, destination_file_name):
 
     blob.download_to_filename(destination_file_name)
 
-<<<<<<< HEAD:run.py
-=======
 if __name__ == "__main__":
     app.run(port=9090, debug=True)
 
@@ -65,4 +63,3 @@ if __name__ == "__main__":
         for outfilename in outfilenames:
             results.write(outfilename + "\n")
     """
->>>>>>> e7b16bab2320a0bba646c0d8edf9d5e76a3ba81a:app.py
